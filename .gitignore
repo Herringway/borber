@@ -1,0 +1,15 @@
+.dub
+docs.json
+__dummy.html
+docs/
+borber.so
+borber.dylib
+borber.dll
+borber.a
+borber.lib
+borber-test-*
+*.exe
+*.o
+*.obj
+*.lst
+dub.selections.json

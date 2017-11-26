@@ -1,0 +1,10 @@
+---
+totalDraws: 11
+mythrilCost: 50
+guaranteedWins: 1
+odds: 0.14
+cutoff: 0.05
+subDivisions:
+- name: A relic
+  odds: 1.0
+...
