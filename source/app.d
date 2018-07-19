@@ -9,9 +9,18 @@ struct Config {
 	uint totalDraws;
 	uint mythrilCost;
 	uint guaranteedWins;
+	Group[] groups;
 	SubDivision[] subDivisions;
 	double odds;
 	double cutoff;
+}
+struct Group {
+	string name;
+	Item[] items;
+}
+struct Item {
+	string name;
+	ulong count;
 }
 struct SubDivision {
 	string name;
@@ -37,6 +46,12 @@ void main(string[] args) {
 	writefln!"Chance of drawing 5* or better: %3.1f%%"(conf.odds*100);
 	writefln!"Number of guaranteed successes: %s"(conf.guaranteedWins);
 	writefln!"Not showing chances less than %3.1f%%"(conf.cutoff*100);
+	foreach (group; conf.groups) {
+		ulong total = group.items.map!(x => x.count).sum;
+		foreach (item; group.items) {
+			conf.subDivisions ~= SubDivision(item.name, cast(double)item.count/total);
+		}
+	}
 	SubDivision[][] overallSubDivisions;
 	foreach (i, subdiv; conf.subDivisions) {
 		overallSubDivisions ~= new SubDivision[](conf.totalDraws+1);
@@ -46,7 +61,7 @@ void main(string[] args) {
 	}
 	auto results = doRolls(conf.totalDraws-conf.guaranteedWins, conf.guaranteedWins, conf.odds);
 	bool printRest;
-	uint lastPrint = 1;
+	ulong lastPrint = 1;
 	double cumulative = 0.0;
 	foreach (result; results.results) {
 		if (result.chance >= conf.cutoff) {
